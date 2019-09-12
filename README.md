@@ -321,4 +321,74 @@ You can pass a string variable, or pass a literal string through by surrounding 
 
 ### RunButton
 
-## Tips 
+## Creating a new tool
+Create a base tool using the following skeleton. Save as a .vue file
+
+```
+<template>
+ <!-- Progress bar to let the user know something is running -->
+ <v-progress-linear
+   indeterminate
+   color="primary"
+   v-show="loading"
+ ></v-progress-linear>
+  <!-- alert messages, for when a job is done -->
+  <v-alert
+   dismissible
+   v-for="(item, i) in runningJobs"
+   v-model="item.showalert"
+   :type="item.alerttype"
+   >
+   {{item.status}}
+</v-alert>
+
+
+<!-- Run Button and Clear Button -->
+<span style="float:right;">
+ <RunButton
+   :runData="runData"
+  v-on:progressUpdated="getRunStatus"
+  />
+  <v-btn
+    color="error"
+      class="mr-4"
+      @click="resetForm"
+    >
+     Clear
+   </v-btn>
+   </span>
+</template>
+<script>
+import RunButton from '../../common/RunButton';
+export default {
+ props: ['compKey'],
+ components:{
+   RunButton
+ },
+ data: () => ({
+   runData: {runningTool:""}, //this gets passed to the run button
+   runningJobs: [],  //So we know what's running
+   loading: false   //lets the toolbox know something is running
+ }),
+ methods: {
+   getRunStatus: function(data){
+    //console.log(data);
+    this.loading = data.loading;
+    this.emitProgress(data.loading ? "loading" : "done");
+    this.runningJobs = get_cdtlb().getAlerts(data.igniteData, this.runData.runningTool);
+  },
+  emitProgress: function(progress){
+  	var content = {
+ 	  progress: progress,
+   	  key: this.compKey
+  	}
+  	console.log([progress,content]);
+  	this.$emit("progressUpdated", content);
+    }
+  },
+  mounted: function() { //Mounted = tool is ready
+    this.emitProgress("done");
+  }
+}
+</script>
+```
