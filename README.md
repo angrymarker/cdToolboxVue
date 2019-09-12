@@ -326,6 +326,7 @@ Create .vue file using the following skeleton.
 
 ```
 <template>
+ <v-app>
  <!-- Progress bar to let the user know something is running -->
  <v-progress-linear
    indeterminate
@@ -357,6 +358,7 @@ Create .vue file using the following skeleton.
      Clear
    </v-btn>
    </span>
+   </v-app>
 </template>
 <script>
 import RunButton from '../../common/RunButton';
