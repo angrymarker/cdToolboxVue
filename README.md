@@ -322,7 +322,7 @@ You can pass a string variable, or pass a literal string through by surrounding 
 ### RunButton
 
 ## Creating a new tool
-Create a base tool using the following skeleton. Save as a .vue file
+Create .vue file using the following skeleton.
 
 ```
 <template>
@@ -391,4 +391,39 @@ export default {
   }
 }
 </script>
+```
+Update the tools.json file
+```
+{
+      "id": One Higher than the last,
+      "name": "Tool Name",
+      "hidden": true,
+      "description": "Tool Description",
+      "Version": "0.1.0",
+      "Group": "Tool Group",
+      "category": "enter category"
+      "Updates": [],
+      "Component": "Enter component name with no spaces - NewTool in this case"
+    }
+```
+
+Update the cdtoolbox.vue file
+```
+//import the vue file
+import NewTool from './tools/cd/NewTool';
+```
+Add to the components list
+```
+components:{
+ ...,
+ NewTool,
+ ...
+}
+```
+Add to the getValidTools else if line
+```
+else if (this.tools[t].name == "Tool Name")
+ {
+ this.visibletools.push(this.tools[t]);
+}
 ```
